@@ -1,9 +1,19 @@
-const username = "M1chU02";
-const token = "";
+let username = "";
+
+document.getElementById("fetchButton").addEventListener("click", () => {
+  username = document.getElementById("usernameInput").value.trim();
+  if (username) {
+    fetchContributions();
+  } else {
+    alert("Please enter a valid GitHub username");
+  }
+});
 
 async function fetchContributions() {
-  const query = `
-    {
+  const token =
+    "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";
+
+  const query = `{
       user(login: "${username}") {
         contributionsCollection {
           contributionCalendar {
@@ -22,25 +32,33 @@ async function fetchContributions() {
     const response = await fetch("https://api.github.com/graphql", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ query }),
     });
 
     const result = await response.json();
+    if (result.errors) {
+      throw new Error(result.errors[0].message);
+    }
+
     const contributions =
       result.data.user.contributionsCollection.contributionCalendar.weeks;
     renderContributions(contributions);
+    updateProfileLink();
   } catch (error) {
     console.error("Error fetching contributions:", error);
+    alert(`Error: ${error.message}`);
   }
 }
 
 function renderContributions(weeks) {
   const usernameEl = document.getElementById("username");
   usernameEl.innerText = username;
+
   const grid = document.getElementById("contributionsGrid");
+  grid.innerHTML = ""; // Clear previous contributions
 
   weeks.forEach((week) => {
     week.contributionDays.forEach((day) => {
@@ -52,6 +70,7 @@ function renderContributions(weeks) {
         gridItem.classList.add(`level-${level}`);
       }
 
+      gridItem.title = `${day.date}: ${day.contributionCount} contributions`;
       grid.appendChild(gridItem);
     });
   });
@@ -65,4 +84,9 @@ function getContributionLevel(contributionCount) {
   return 0;
 }
 
-fetchContributions();
+// Add this function at the end of your script.js file
+function updateProfileLink() {
+  const profileLink = document.getElementById("profileLink");
+  profileLink.href = `https://github.com/${username}`;
+  profileLink.style.display = username ? "inline" : "none";
+}

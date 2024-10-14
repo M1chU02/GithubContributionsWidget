@@ -5,10 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GitHub Contributions Widget</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   </head>
   <body>
     <div class="contributions-container">
-      <h1>GitHub Contributions for <span id="username"></span></h1>
+      <div class="input-container">
+        <input type="text" id="usernameInput" placeholder="Enter GitHub username" />
+        <button id="fetchButton">Fetch Contributions</button>
+      </div>
+      <h1>
+        GitHub Contributions for <span id="username">
+        <a id="profileLink" href="#" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </h1>
       <div class="contributions-grid" id="contributionsGrid"></div>
     </div>
 
