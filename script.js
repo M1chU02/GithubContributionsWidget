@@ -10,8 +10,7 @@ document.getElementById("fetchButton").addEventListener("click", () => {
 });
 
 async function fetchContributions() {
-  const token =
-    "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";
+  const token = "";
 
   const query = `{
       user(login: "${username}") {
@@ -58,7 +57,7 @@ function renderContributions(weeks) {
   usernameEl.innerText = username;
 
   const grid = document.getElementById("contributionsGrid");
-  grid.innerHTML = ""; // Clear previous contributions
+  grid.innerHTML = "";
 
   weeks.forEach((week) => {
     week.contributionDays.forEach((day) => {
